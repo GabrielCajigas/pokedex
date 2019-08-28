@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        img {
+            width: 24%;
+        }
+
+
+
+        /* #pokedex {
+            width: 24%;
+            min-height: 50%;
+            position: fixed;
+            top: 25%;
+            right: 10px;
+            display: inline-block;
+            vertical-align: top;
+            border: 2px solid red;
+        } */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* The Modal (background) */
+        .pokedex {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .pokedex-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    <button id="myBtn">Open Modal</button>
+    <div id="mypokedex" class="pokedex">
+
+        <!-- Modal content -->
+        <div class="pokedex-content">
+            <div class="close"></div>
+            <h1 id="pname">Bulbausar</h1>
+            <div id="ppicture"></div>
+            <h3>Types</h3>
+            <ul id="ptypes">
+                <li id="type">efdf</li>
+
+            </ul>
+            <h3>Height</h3>
+            <li id="pheight">7</li>
+            <h3>Weight</h3>
+            <li id="pweight">69</li>
+
+
+
+        </div>
+        <!-- Trigger/Open The Modal -->
+
+    </div>
+
+
+</body>
+<script type="text/javascript">
+    // Get the modal
+    var pokedex = document.getElementById("mypokedex");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+    btn.onclick = function () {
+        pokedex.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        pokedex.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == pokedex) {
+            pokedex.style.display = "none";
+        }
+    }
+    function Pics() {
+        output = "";
+        for (var i = 1; i < 156; i++) {
+            // output += `<img src='pokemon${i}.jpeg' alt='Pokemon' />`;
+            output += `<img id="${i}" src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i}.png' alt='Pokemon' />`;
+            // `https://pokeapi.co/api/v2/pokemon/${i}`
+
+        }
+        document.getElementById('container').innerHTML = output;
+    }
+    Pics();
+
+    function pokedex() {
+
+    }
+
+
+
+
+    $('img').click(function () {
+        pokedex.style.display = "block";
+        var id = $(this).attr('id');
+        console.log($(this).attr('id'));
+        $.get(`https://pokeapi.co/api/v2/pokemon/${id}`, function (res) {
+            console.log(res);
+            document.getElementById('pname').innerHTML = res.name;
+            document.getElementById('ppicture').innerHTML = `<img src='${res.sprites.front_shiny}' alt='Pokemon' />`;
+            // `<img id="${i}" src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${res.png}' alt='Pokemon' />`;
+            typesres = res.types;
+            var output = "";
+            for (var i = 0; i < typesres.length; i++) {
+                output += `<li> ${res.types[i].type.name}</li>`;
+            };
+            document.getElementById('ptypes').innerHTML = output;
+            document.getElementById('pheight').innerHTML = res.height;
+            document.getElementById('pweight').innerHTML = res.weight;
+
+        }, "json");
+    })
+
+</script>
+
+</html>
